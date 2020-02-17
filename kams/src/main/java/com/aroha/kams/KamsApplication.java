@@ -14,10 +14,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 public class KamsApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(KamsApplication.class, args);
-	}
-
 	@PostConstruct
 	void init() {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
@@ -27,7 +23,7 @@ public class KamsApplication {
 
 		}
 	}
-
+	
 	@Configuration
 	@EnableWebMvc
 	public class WebConfig implements WebMvcConfigurer {
@@ -35,5 +31,9 @@ public class KamsApplication {
 		public void addCorsMappings(CorsRegistry registry) {
 			registry.addMapping("/**");
 		}
+	}
+
+	public static void main(String[] args) {
+		SpringApplication.run(KamsApplication.class, args);
 	}
 }

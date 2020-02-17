@@ -6,10 +6,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.NaturalId;
+
 @Entity
 @Table(name = "user_info")
 public class UserEntity {
 
+	
 	
 	private String userPwd;
 	private String userName;
@@ -84,6 +87,11 @@ public class UserEntity {
 
 	public void seteMail(String eMail) {
 		this.eMail = eMail;
+	}
+
+	public String getPassword() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
