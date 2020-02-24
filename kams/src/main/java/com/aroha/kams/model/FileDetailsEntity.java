@@ -1,6 +1,7 @@
 package com.aroha.kams.model;
 
-import java.sql.Date;
+import java.util.Date;
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +13,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "file_details")
 public class FileDetailsEntity {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int fileId;
@@ -50,7 +50,7 @@ public class FileDetailsEntity {
 	
 	@Column(name="docTeam")
 	private String docTeam;
-	
+
 	public int getFileId() {
 		return fileId;
 	}

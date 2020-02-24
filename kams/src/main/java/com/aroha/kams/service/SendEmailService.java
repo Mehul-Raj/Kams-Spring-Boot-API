@@ -6,7 +6,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.aroha.kams.model.UserEntity;
-import com.aroha.kams.payload.UserPayload;
 
 @Service
 public class SendEmailService {

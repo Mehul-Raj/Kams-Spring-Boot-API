@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.aroha.kams.config.AppConfig;
 import com.aroha.kams.model.CompanyEntity;
+import com.aroha.kams.model.DepartmentEntity;
+import com.aroha.kams.model.ProjectEntity;
+import com.aroha.kams.model.TeamEntity;
 import com.aroha.kams.payload.CompanyPayload;
 import com.aroha.kams.payload.DepartmentPayload;
 import com.aroha.kams.payload.ProjectPayload;
@@ -56,7 +59,7 @@ public class AdminService {
 		return companyRepository.existsBycompanyName(companyName);
 	}
 
-	// Find Department
+	// Check Department exits Or Not
 	public boolean findDepartment(DepartmentPayload departmentPayload) {
 		boolean status = false;
 		boolean companyExist = departmentRepository.existsBycompanyName(departmentPayload.getCompanyName());
@@ -99,9 +102,23 @@ public class AdminService {
 
 	// Get All CompanyName
 	public List<CompanyEntity> findAllCompany() {
-		System.out.println("YES-22");
 		return companyRepository.findAll();
 	}
+	
+	// Get All Department Name Based On CompanyName
+	public List<DepartmentEntity> findAllDepartment(String companyName) {		
+		return departmentRepository.findBycompanyName(companyName);
+	}
+	
+	//Get All Project Name Based On CompanyName And Department Name
+	public List<ProjectEntity> findAllProject(String companyName, String departmentName) {
+		return projectRepository.findAllByCompanyNameAndDepartmentName(companyName,departmentName);
+	}
+	
+	//Get All Project Name Based On CompanyName And Department Name
+		public List<TeamEntity> findAllTeam(String companyName, String departmentName,String projectName) {
+			return teamRepository.findAllByCompanyNameAndDepartmentNameAndProjectName(companyName,departmentName,projectName);
+		}
 
 	// Create User
 	public UserPayload createUser(UserPayload userPayload) {
@@ -221,7 +238,6 @@ public class AdminService {
 
 	// Create Team
 	public TeamPayload createTeam(TeamPayload teamPayload) {
-
 		TeamPayload isTeamCreated = adminDBService.createTeam(teamPayload);
 		if (isTeamCreated.getStatus().equalsIgnoreCase("Success")) {
 			// create Project In FileSystem
@@ -251,5 +267,5 @@ public class AdminService {
 			teamPayload.setStatus("Error");
 		}
 		return teamPayload;
-	}
+	}	
 }

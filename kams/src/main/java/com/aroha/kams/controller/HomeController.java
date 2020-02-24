@@ -2,6 +2,8 @@ package com.aroha.kams.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,12 +37,19 @@ public class HomeController {
 
 	@Autowired
 	UserRepository dao;
+	
+	@Autowired
+	HttpSession session;
 
 	@PostMapping("/checkLogin")
 	public ResponseEntity<?> checkLogin(@RequestBody UserPayload userpayload) {
 		Boolean isUserExists = homeService.findEmail(userpayload.geteMail());
 		if (isUserExists) {
 			UserPayload getUserpayload = homeService.checkLogin(userpayload);
+			session.setAttribute("UserEmail", userpayload.geteMail());
+			System.out.println("Email IDD"+userpayload.geteMail());
+			String getEMailId = (String) session.getAttribute("UserEmail");
+			System.out.println("Get EmailId"+getEMailId);
 			return ResponseEntity.ok(getUserpayload);
 		} else {
 			userpayload.setStatus("Error");
@@ -66,8 +75,8 @@ public class HomeController {
 		String otpGenerated = otpPayload.getOtpGenerated();
 		String email = otpPayload.geteMailForOtp();
 		if (otpGenerated.equals(otpPayload.getOtpEntered())) {
-			List<UserEntity> userList = dao.findByeMail(email);
-			UserEntity user = userList.get(0);
+			//List<UserEntity> userList = 
+			UserEntity user = dao.findByeMail(email);
 			user.setUserPwd(otpPayload.getNewPassword());
 			dao.save(user);
 			return ResponseEntity.ok("Password Changed");

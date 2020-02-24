@@ -4,15 +4,18 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aroha.kams.model.CompanyEntity;
+import com.aroha.kams.model.DepartmentEntity;
+import com.aroha.kams.model.ProjectEntity;
+import com.aroha.kams.model.TeamEntity;
 import com.aroha.kams.payload.CompanyPayload;
 import com.aroha.kams.payload.DepartmentPayload;
 import com.aroha.kams.payload.ProjectPayload;
@@ -77,26 +80,46 @@ public class AdminController {
 
 	@PostMapping("createUser")
 	public ResponseEntity<?> createUser(@RequestBody UserPayload userPayload) {
+		System.out.println("I");
 		boolean isProjectExists = adminService.findUser(userPayload);
 		if (!isProjectExists) {
 			return ResponseEntity.ok(adminService.createUser(userPayload));
 		} else {
 			userPayload.setMsg("User with " + userPayload.geteMail() + " already Exits");
 			userPayload.setStatus("Error");
+			System.out.println(userPayload.getMsg());
 			return ResponseEntity.ok(userPayload);
 		}
 	}
 
 	@GetMapping("getCompanyName")
 	public ResponseEntity<?> getCompanyName() {
-		List<CompanyEntity> companyName = adminService.findAllCompany();
-		return ResponseEntity.ok(companyName);
+		List<CompanyEntity> companyNameList = adminService.findAllCompany();
+		return ResponseEntity.ok(companyNameList);
 	}
 
-	@PostMapping("getDepartment")
-	public ResponseEntity<?> getDepartmentByCompanyName(@RequestBody DepartmentPayload departmentPayload) {
-
-		return null;
-
+	@GetMapping("getDepartment/{companyName}")
+	public ResponseEntity<?> getDepartmentByCompanyName(@PathVariable(value = "companyName") String companyName) {
+		List<DepartmentEntity> departmentNameList = adminService.findAllDepartment(companyName);
+		return ResponseEntity.ok(departmentNameList);
+	}
+	
+	@GetMapping("getProject/{companyName}/{departmentName}")
+	public ResponseEntity<?> getProjectByDepartmentAndCompanyName(
+			@PathVariable(value = "companyName") String companyName,
+			@PathVariable(value = "departmentName") String departmentName
+			) {
+		List<ProjectEntity> projectNameList = adminService.findAllProject(companyName,departmentName);
+		return ResponseEntity.ok(projectNameList);
+	}
+	
+	@GetMapping("getTeam/{companyName}/{departmentName}/{projectName}")
+	public ResponseEntity<?> getTeamByDepartmentAndCompanyName(
+			@PathVariable(value = "companyName") String companyName,
+			@PathVariable(value = "departmentName") String departmentName,
+			@PathVariable(value = "projectName") String projectName
+			) {
+		List<TeamEntity> teamNameList = adminService.findAllTeam(companyName, departmentName, projectName);
+		return ResponseEntity.ok(teamNameList);
 	}
 }
