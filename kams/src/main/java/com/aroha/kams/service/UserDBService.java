@@ -111,7 +111,7 @@ public class UserDBService {
 						filelistForUser.add(filelist.get(leng));
 					}
 				} else if (filelist.get(leng).getDocTeam().equalsIgnoreCase(team)
-						&& filelist.get(leng).getFileName().contains("." + docType)) {
+		 				&& filelist.get(leng).getFileName().contains("." + docType)) {
 					filelistForUser.add(filelist.get(leng));
 				}
 			}
