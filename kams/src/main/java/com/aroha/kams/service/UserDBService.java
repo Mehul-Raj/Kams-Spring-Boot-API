@@ -1,12 +1,13 @@
 package com.aroha.kams.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.aroha.kams.model.FileDetailsEntity;
@@ -41,7 +42,7 @@ public class UserDBService {
 	// Get ALl FILE
 	public List<FileDetailsEntity> getAllFile(String getEMailId) {
 		UserEntity user = (UserEntity) userRepository.findByeMail(getEMailId);
-		System.out.println("getEmailId is"+getEMailId);
+		System.out.println("getEmailId is" + getEMailId);
 		List<FileDetailsEntity> filelist = fileDetailsRepository.findAll();
 
 		// Create ArrayList To Add Elements
@@ -87,10 +88,9 @@ public class UserDBService {
 	}
 
 	// Get File By Type
-	public List<FileDetailsEntity> getAllFileByType(String docType,String getEMailId) {
+	public List<FileDetailsEntity> getAllFileByType(String docType, String getEMailId) {
 		UserEntity user = userRepository.findById(getEMailId).orElse(new UserEntity());
 		List<FileDetailsEntity> filelist = fileDetailsRepository.findAll();
-
 		// Create ArrayList To Add Elements
 		List<FileDetailsEntity> filelistForUser = new ArrayList<FileDetailsEntity>();
 		int listSize = filelist.size();
@@ -98,12 +98,11 @@ public class UserDBService {
 		String role = user.getUserRole().toUpperCase();
 
 		// Check Role
-		// If Role Is user Provide All Document in current Team with tag
+		// If Role Is user Provide All Document in current Team with team
 		if (role.equalsIgnoreCase("ROLE_USER")) {
-			System.out.println("inside User Role");
 			for (int leng = 0; leng < listSize; leng++) {
+				System.out.println("File Name " + filelist.get(leng).getFileName());
 				String team = user.getUserTeamName();
-				System.out.println("comapre " + filelist.get(leng).getDocTeam() + "   " + team);
 				if (docType.equalsIgnoreCase("png")) {
 					if (filelist.get(leng).getDocTeam().equalsIgnoreCase(team)
 							&& filelist.get(leng).getFileName().contains("." + docType)
@@ -111,10 +110,11 @@ public class UserDBService {
 						filelistForUser.add(filelist.get(leng));
 					}
 				} else if (filelist.get(leng).getDocTeam().equalsIgnoreCase(team)
-		 				&& filelist.get(leng).getFileName().contains("." + docType)) {
+						&& filelist.get(leng).getFileName().contains("." + docType)) {
 					filelistForUser.add(filelist.get(leng));
 				}
 			}
+			System.out.println("Array " + filelistForUser.size());
 		}
 
 		// If Role is Team Lead then team and project document can be Accessed;
@@ -143,7 +143,7 @@ public class UserDBService {
 	}
 
 	// Get File By Tags
-	public List<FileDetailsEntity> getAllFileByTag(String tag,String getEMailId) {
+	public List<FileDetailsEntity> getAllFileByTag(String tag, String getEMailId) {
 		UserEntity user = userRepository.findById(getEMailId).orElse(new UserEntity());
 		List<FileDetailsEntity> filelist = fileDetailsRepository.findAll();
 
@@ -157,12 +157,10 @@ public class UserDBService {
 		if (role.equalsIgnoreCase("ROLE_USER")) {
 			for (int leng = 0; leng < listSize; leng++) {
 				String team = user.getUserTeamName();
-				System.out.println("comapre " + filelist.get(leng).getDocTeam() + "   " + team);
 				if (filelist.get(leng).getDocTeam().equalsIgnoreCase(team)
 						&& filelist.get(leng).getTag().contains(tag)) {
 					filelistForUser.add(filelist.get(leng));
 				}
-				// System.out.println("Final Check" + filelistForUser.get(0).getFileUrl());
 			}
 		}
 
@@ -188,6 +186,17 @@ public class UserDBService {
 			}
 		}
 		return filelistForUser;
+	}
+
+	public Set<String> findAllTag() {
+		List<FileDetailsEntity> filelist = fileDetailsRepository.findAll();
+		List<String> tagName = new ArrayList<>();
+		int tagNameSize = filelist.size();
+		for (int leng = 0; leng < tagNameSize; leng++) {
+			tagName.add(filelist.get(leng).getTag());
+		}
+		Set<String> tagSet = new HashSet<String>(tagName);
+		return tagSet;
 	}
 
 }

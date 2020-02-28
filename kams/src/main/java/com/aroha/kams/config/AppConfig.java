@@ -8,7 +8,8 @@ public class AppConfig {
 	@Value("${storage.name}")
 	private String storageName;
 
-	@Value("${storage.directory}")
+	//@Value("${storage.directory}")
+	@Value("${file.upload-dir}")	
 	private String filePath;
 
 	@Value("${admin.emailId}")

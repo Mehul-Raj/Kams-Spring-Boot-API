@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.aroha.kams.model.CompanyEntity;
 import com.aroha.kams.model.DepartmentEntity;
 import com.aroha.kams.model.ProjectEntity;
+import com.aroha.kams.model.TagEntity;
 import com.aroha.kams.model.TeamEntity;
 import com.aroha.kams.payload.CompanyPayload;
 import com.aroha.kams.payload.DepartmentPayload;
 import com.aroha.kams.payload.ProjectPayload;
+import com.aroha.kams.payload.TagPayload;
 import com.aroha.kams.payload.TeamPayload;
 import com.aroha.kams.payload.UserPayload;
 import com.aroha.kams.service.AdminService;
@@ -122,4 +124,23 @@ public class AdminController {
 		List<TeamEntity> teamNameList = adminService.findAllTeam(companyName, departmentName, projectName);
 		return ResponseEntity.ok(teamNameList);
 	}
+	
+	@PostMapping("createTag")
+	public ResponseEntity<?> createTag(@RequestBody TagPayload tagPayload) {
+		boolean isTagExists = adminService.findTag(tagPayload.getTagName());
+		if (!isTagExists) {
+			return ResponseEntity.ok(adminService.createTag(tagPayload));
+		} else {
+			tagPayload.setMsg("Company Already Exits");
+			tagPayload.setStatus("Error");
+			return ResponseEntity.ok(tagPayload);
+		}
+	}
+	
+	@GetMapping("getTagName")
+	public ResponseEntity<?> getTagName() {
+		List<TagEntity> tagNameList = adminService.findAllTag();
+		return ResponseEntity.ok(tagNameList);
+	}
+	
 }

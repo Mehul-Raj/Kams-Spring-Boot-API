@@ -1,12 +1,14 @@
 package com.aroha.kams.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,7 @@ import com.aroha.kams.payload.SearchByPayload;
 import com.aroha.kams.service.AwsS3Upload;
 import com.aroha.kams.service.FileSystemUpload;
 import com.aroha.kams.service.UserDBService;
+
 
 @RestController
 @RequestMapping("/api/dropbox/user")
@@ -50,7 +53,7 @@ public class UserController {
 			) {
 		String status = "";
 		if (appConfig.getStorageName().equalsIgnoreCase("fileSystem")) {
-			status = fileUploadService.uploadFile(file, uploadTo, documentTag);
+			status = fileUploadService.uploadFile(file, uploadTo, documentTag,getEmailId);
 		} else if (appConfig.getStorageName().equalsIgnoreCase("AwsCloud")) {
 			status = awsUpload.uploadFile(file, uploadTo, documentTag,getEmailId);
 		}
@@ -72,5 +75,11 @@ public class UserController {
 	public List<FileDetailsEntity> getDocumentByType(@RequestBody SearchByPayload searchPayload) {
 		System.out.println(searchPayload.getSearchByType()+" "+searchPayload.geteMail());
 		return userDBservice.getAllFileByType(searchPayload.getSearchByType(),searchPayload.geteMail());
+	}
+	
+	@GetMapping("getTagName")
+	public ResponseEntity<?> getTagName() {
+		Set<String> tagNameList = userDBservice.findAllTag();
+		return ResponseEntity.ok(tagNameList);
 	}
 }

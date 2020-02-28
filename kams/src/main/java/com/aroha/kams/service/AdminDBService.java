@@ -50,9 +50,12 @@ public class AdminDBService {
 		try {
 			companyRepository.save(company);
 			companyPayload.setStatus("Success");
+			companyPayload.setMsg("Company Created");
 
 		} catch (Exception e) {
 			companyPayload.setStatus("Error");
+			companyPayload.setMsg("Company Not Created");
+
 		}
 
 		return companyPayload;
@@ -66,8 +69,10 @@ public class AdminDBService {
 		try {
 			departmentRepository.save(department);
 			departmentPayload.setStatus("Success");
+			departmentPayload.setMsg("Department Created");
 		} catch (Exception e) {
 			departmentPayload.setStatus("Error");
+			departmentPayload.setMsg("Department Created");
 		}
 		return departmentPayload;
 	}
@@ -123,7 +128,7 @@ public class AdminDBService {
 			boolean otpstatus = sendEmailService.sendEmail(user);
 			if (otpstatus) {
 				userPayload.setStatus("Success");
-				userPayload.setMsg("User Created Password Sent On Your Registered Email");
+				userPayload.setMsg("User Created Password Sent On Given Email");
 				return userPayload;
 			} else {
 				userPayload.setStatus("Error");

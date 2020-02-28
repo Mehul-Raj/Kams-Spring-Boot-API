@@ -2,16 +2,24 @@ package com.aroha.kams;
 
 import java.util.TimeZone;
 
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.aroha.kams.properties.FileStorageProperties;
+
+
 @SpringBootApplication
+@EnableConfigurationProperties({
+	FileStorageProperties.class
+})
 public class KamsApplication {
 
 	@PostConstruct

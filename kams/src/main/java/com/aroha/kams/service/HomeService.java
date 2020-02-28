@@ -24,12 +24,13 @@ public class HomeService {
 	public UserPayload checkLogin(UserPayload userPayload) {
 		UserEntity user = userRepo.findById(userPayload.geteMail()).orElse(new UserEntity());
 		// Check For The Default Admin
-		if (userPayload.geteMail().equalsIgnoreCase(appConfig.getAdminEmail())
-				&& userPayload.getUserPwd().equals(appConfig.getAdminPassword())) {
-			userPayload.setMsg("Login As Admin");
-			userPayload.setStatus("success");
-			return userPayload;
-		} else if (user.geteMail().equalsIgnoreCase(userPayload.geteMail())
+		/*
+		 * if (userPayload.geteMail().equalsIgnoreCase(appConfig.getAdminEmail()) &&
+		 * userPayload.getUserPwd().equals(appConfig.getAdminPassword())) {
+		 * userPayload.setMsg("Login As Admin"); userPayload.setStatus("success");
+		 * return userPayload;
+		 */
+		if (user.geteMail().equalsIgnoreCase(userPayload.geteMail())
 				&& user.getUserPwd().equals(userPayload.getUserPwd())) {
 			userPayload.setMsg("Login As User");
 			userPayload.setStatus("success");
@@ -42,7 +43,7 @@ public class HomeService {
 			userPayload.setUserRole(user.getUserRole());
 			return userPayload;
 		} else {
-			userPayload.setMsg("Login Failed");
+			userPayload.setMsg("Password Incorrect");
 			userPayload.setStatus("error");
 			return userPayload;
 		}

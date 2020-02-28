@@ -70,10 +70,11 @@ public class AwsS3Upload {
 
 	public String uploadFile(MultipartFile multipartFile, String uploadTo, String documentTag,String getEMailId) {
 		String status = "";
+		Long size=multipartFile.getSize();
 		try {
 			File file = convertMultiPartToFile(multipartFile);
 			String fileName = generateFileName(multipartFile);
-			status = uploadFileTos3bucket(fileName, file, uploadTo, documentTag,getEMailId);
+			status = uploadFileTos3bucket(fileName, file, uploadTo, documentTag,getEMailId,size);
 			file.delete();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -82,7 +83,7 @@ public class AwsS3Upload {
 	}
 
 	// upload file fore User Role
-	public String uploadFileTos3bucket(String fileName, File file, String uploadTo, String documentTag,String getEMailId)
+	public String uploadFileTos3bucket(String fileName, File file, String uploadTo, String documentTag,String getEMailId,Long size)
 			throws ParseException {
 		boolean status = false;
 		String fileUrl = "";
@@ -173,7 +174,7 @@ public class AwsS3Upload {
 			 */
 			FileDetailsEntity fileDetails = new FileDetailsEntity();
 			fileDetails.setFileName(fileName);
-			fileDetails.setFileSize(56.7);
+			fileDetails.setFileSize(size);
 			fileDetails.setFileUploadTime(fileUploadTimeDate);
 			fileDetails.setFileUrl(fileUrl);
 			fileDetails.setUploadBy(userName);
@@ -183,6 +184,7 @@ public class AwsS3Upload {
 			fileDetails.setDocDepartment(docDepartment);
 			fileDetails.setDocProject(docProject);
 			fileDetails.setDocTeam(docTeam);
+			fileDetails.setStorage("Cloud");
 			System.out.println("5");
 			System.out.println("fileDetails.getFileUrl()" + fileDetails.getFileUrl());
 			userDBService.saveFileDetails(fileDetails);

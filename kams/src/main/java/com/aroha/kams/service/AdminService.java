@@ -9,15 +9,18 @@ import com.aroha.kams.config.AppConfig;
 import com.aroha.kams.model.CompanyEntity;
 import com.aroha.kams.model.DepartmentEntity;
 import com.aroha.kams.model.ProjectEntity;
+import com.aroha.kams.model.TagEntity;
 import com.aroha.kams.model.TeamEntity;
 import com.aroha.kams.payload.CompanyPayload;
 import com.aroha.kams.payload.DepartmentPayload;
 import com.aroha.kams.payload.ProjectPayload;
+import com.aroha.kams.payload.TagPayload;
 import com.aroha.kams.payload.TeamPayload;
 import com.aroha.kams.payload.UserPayload;
 import com.aroha.kams.repository.CompanyRepository;
 import com.aroha.kams.repository.DepartmentRepository;
 import com.aroha.kams.repository.ProjectRepository;
+import com.aroha.kams.repository.TagNameRepository;
 import com.aroha.kams.repository.TeamRepository;
 import com.aroha.kams.repository.UserRepository;
 
@@ -54,9 +57,17 @@ public class AdminService {
 	@Autowired
 	UserRepository userRepository;
 
+	@Autowired
+	TagNameRepository tagNameRepository;
+
 	// Find Company
 	public boolean findCompany(String companyName) {
 		return companyRepository.existsBycompanyName(companyName);
+	}
+
+	// Find Tag Name
+	public boolean findTag(String tagName) {
+		return tagNameRepository.existsBytagName(tagName);
 	}
 
 	// Check Department exits Or Not
@@ -104,26 +115,32 @@ public class AdminService {
 	public List<CompanyEntity> findAllCompany() {
 		return companyRepository.findAll();
 	}
-	
+
 	// Get All Department Name Based On CompanyName
-	public List<DepartmentEntity> findAllDepartment(String companyName) {		
+	public List<DepartmentEntity> findAllDepartment(String companyName) {
 		return departmentRepository.findBycompanyName(companyName);
 	}
-	
-	//Get All Project Name Based On CompanyName And Department Name
+
+	// Get All Project Name Based On CompanyName And Department Name
 	public List<ProjectEntity> findAllProject(String companyName, String departmentName) {
-		return projectRepository.findAllByCompanyNameAndDepartmentName(companyName,departmentName);
+		return projectRepository.findAllByCompanyNameAndDepartmentName(companyName, departmentName);
 	}
-	
-	//Get All Project Name Based On CompanyName And Department Name
-		public List<TeamEntity> findAllTeam(String companyName, String departmentName,String projectName) {
-			return teamRepository.findAllByCompanyNameAndDepartmentNameAndProjectName(companyName,departmentName,projectName);
-		}
+
+	// Get All Project Name Based On CompanyName And Department Name
+	public List<TeamEntity> findAllTeam(String companyName, String departmentName, String projectName) {
+		return teamRepository.findAllByCompanyNameAndDepartmentNameAndProjectName(companyName, departmentName,
+				projectName);
+	}
 
 	// Create User
 	public UserPayload createUser(UserPayload userPayload) {
 		UserPayload isUserCreated = adminDBService.createUser(userPayload);
 		return isUserCreated;
+	}
+
+	// Get All Tga Name
+	public List<TagEntity> findAllTag() {
+		return tagNameRepository.findAll();
 	}
 
 	// Create Company
@@ -134,7 +151,8 @@ public class AdminService {
 		if (isCompanyCreated.getStatus().equalsIgnoreCase("Success")) {
 			// Create Company In File System
 			if (appConfig.getStorageName().equalsIgnoreCase("fileSystem")) {
-				boolean status = fileSystemCreateService.createCompany(companyPayload);
+				//boolean status = fileSystemCreateService.createCompany(companyPayload);
+				boolean status=true;
 				if (status) {
 					companyPayload.setMsg("Company Created In FileSystem");
 					companyPayload.setStatus("Success");
@@ -172,7 +190,8 @@ public class AdminService {
 		if (isDepartmentCreated.getStatus().equalsIgnoreCase("Success")) {
 			// create Department In FileSystem
 			if (appConfig.getStorageName().equalsIgnoreCase("fileSystem")) {
-				boolean status = fileSystemCreateService.createDepartment(departmentPayload);
+				//boolean status = fileSystemCreateService.createDepartment(departmentPayload);
+				boolean status=true;
 				if (status) {
 					departmentPayload.setMsg("Department Created In FileSystem");
 					departmentPayload.setStatus("Success");
@@ -209,7 +228,8 @@ public class AdminService {
 
 			// create Project In FileSystem
 			if (appConfig.getStorageName().equalsIgnoreCase("fileSystem")) {
-				boolean status = fileSystemCreateService.createProject(projectPayload);
+				//boolean status = fileSystemCreateService.createProject(projectPayload);
+				boolean status=true;
 				if (status) {
 					projectPayload.setMsg("Project Created In FileSystem");
 					projectPayload.setStatus("Success");
@@ -242,7 +262,8 @@ public class AdminService {
 		if (isTeamCreated.getStatus().equalsIgnoreCase("Success")) {
 			// create Project In FileSystem
 			if (appConfig.getStorageName().equalsIgnoreCase("fileSystem")) {
-				boolean status = fileSystemCreateService.createTeam(teamPayload);
+				//boolean status = fileSystemCreateService.createTeam(teamPayload);
+				boolean status=true;
 				if (status) {
 					teamPayload.setMsg("Project Created In FileSystem");
 					teamPayload.setStatus("Success");
@@ -267,5 +288,20 @@ public class AdminService {
 			teamPayload.setStatus("Error");
 		}
 		return teamPayload;
-	}	
+	}
+
+	// Create Tag
+	public TagPayload createTag(TagPayload tagPayload) {
+		TagEntity tagEntity = new TagEntity();
+		tagEntity.setTagName(tagPayload.getTagName());
+		try {
+			tagNameRepository.save(tagEntity);
+			tagPayload.setMsg("Tag Created");
+			tagPayload.setStatus("Success");
+		} catch (Exception e) {
+			tagPayload.setMsg("Tag Not Created");
+			tagPayload.setStatus("Error");
+		}
+		return tagPayload;
+	}
 }

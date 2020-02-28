@@ -1,7 +1,5 @@
 package com.aroha.kams.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +44,6 @@ public class HomeController {
 		Boolean isUserExists = homeService.findEmail(userpayload.geteMail());
 		if (isUserExists) {
 			UserPayload getUserpayload = homeService.checkLogin(userpayload);
-			session.setAttribute("UserEmail", userpayload.geteMail());
-			System.out.println("Email IDD"+userpayload.geteMail());
-			String getEMailId = (String) session.getAttribute("UserEmail");
-			System.out.println("Get EmailId"+getEMailId);
 			return ResponseEntity.ok(getUserpayload);
 		} else {
 			userpayload.setStatus("Error");

@@ -2,7 +2,6 @@ package com.aroha.kams.model;
 
 import java.util.Date;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,6 +19,26 @@ public class FileDetailsEntity {
 	@Column(name = "fileUrl")
 	private String fileUrl;
 
+	private String Storage;
+
+	public String getStorage() {
+		return Storage;
+	}
+
+	public void setStorage(String storage) {
+		Storage = storage;
+	}
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	public void setMimeType(String mimeType) {
+		this.mimeType = mimeType;
+	}
+
+	private String mimeType;
+
 	@Column(name = "fileName")
 	private String fileName;
 
@@ -31,24 +50,23 @@ public class FileDetailsEntity {
 
 	@Column(name = "uploadFileTo")
 	private String uploadFileTo;
-	
-	@Column(name="uploadBy")
+
+	@Column(name = "uploadBy")
 	private String uploadBy;
-	
-	@Column(name="documentTag")
+
+	@Column(name = "documentTag")
 	private String tag;
 
-	
-	@Column(name="docCompany")
+	@Column(name = "docCompany")
 	private String docCompany;
-	
-	@Column(name="docDepartment")
+
+	@Column(name = "docDepartment")
 	private String docDepartment;
-	
-	@Column(name="docProject")
+
+	@Column(name = "docProject")
 	private String docProject;
-	
-	@Column(name="docTeam")
+
+	@Column(name = "docTeam")
 	private String docTeam;
 
 	public int getFileId() {
@@ -147,4 +165,3 @@ public class FileDetailsEntity {
 		this.docTeam = docTeam;
 	}
 }
-
