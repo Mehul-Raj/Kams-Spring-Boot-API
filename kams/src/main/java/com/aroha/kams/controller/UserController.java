@@ -67,7 +67,6 @@ public class UserController {
 
 	@PostMapping("searchByTag")
 	public List<FileDetailsEntity> getDocumentByTag(@RequestBody SearchByPayload searchPayload) {
-	System.out.println(searchPayload.getSearchByTag()+"   "+searchPayload.geteMail());
 		return userDBservice.getAllFileByTag(searchPayload.getSearchByTag(),searchPayload.geteMail());
 	}
 

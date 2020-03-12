@@ -122,6 +122,7 @@ public class FileStorageService {
 			fileDetails.setDocDepartment(user.getUserdepartment());
 			fileDetails.setDocProject(user.getUserProjectName());
 			fileDetails.setDocTeam(user.getUserTeamName());
+			fileDetails.setMimeType(ContentType);
 			fileDetails.setStorage("File");
 			userDBservice.saveFileDetails(fileDetails);
 			return true;

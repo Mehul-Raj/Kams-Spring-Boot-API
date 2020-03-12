@@ -42,34 +42,38 @@ public class UserDBService {
 	// Get ALl FILE
 	public List<FileDetailsEntity> getAllFile(String getEMailId) {
 		UserEntity user = (UserEntity) userRepository.findByeMail(getEMailId);
-		System.out.println("getEmailId is" + getEMailId);
+		String team = user.getUserTeamName();
+		String companyName = user.getUserCompany();
+		String deptartmentName = user.getUserdepartment();
+		String projectName = user.getUserProjectName();
 		List<FileDetailsEntity> filelist = fileDetailsRepository.findAll();
 
 		// Create ArrayList To Add Elements
 		List<FileDetailsEntity> filelistForUser = new ArrayList<FileDetailsEntity>();
 		int listSize = filelist.size();
-		System.out.println(user.getUserRole());
 		String role = user.getUserRole().toUpperCase();
 
 		// Check Role
 		// If Role Is user Provide Access To All Document in current Team
 		if (role.equalsIgnoreCase("ROLE_USER")) {
 			for (int leng = 0; leng < listSize; leng++) {
-				String team = user.getUserTeamName();
+
 				System.out.println("comapre " + filelist.get(leng).getDocTeam() + "   " + team);
-				if (filelist.get(leng).getDocTeam().equalsIgnoreCase(team)) {
+				if (filelist.get(leng).getDocCompany().equalsIgnoreCase(companyName)
+						&& filelist.get(leng).getDocDepartment().equalsIgnoreCase(deptartmentName)
+						&& filelist.get(leng).getDocProject().equalsIgnoreCase(projectName)
+						&& filelist.get(leng).getDocTeam().equalsIgnoreCase(team)) {
 					filelistForUser.add(filelist.get(leng));
 				}
-				// System.out.println("Final Check" + filelistForUser.get(0).getFileUrl());
 			}
 		}
 
 		// If Role is Team Lead then team and project document can be Accessed;
 		else if (role.equalsIgnoreCase("ROLE_TEAM")) {
-			System.out.println("inside Team Lead Role");
 			for (int leng = 0; leng < listSize; leng++) {
-				String projectName = user.getUserProjectName();
-				if (filelist.get(leng).getDocProject().equalsIgnoreCase(projectName)) {
+				if (filelist.get(leng).getDocCompany().equalsIgnoreCase(companyName)
+						&& filelist.get(leng).getDocDepartment().equalsIgnoreCase(deptartmentName)
+						&& filelist.get(leng).getDocProject().equalsIgnoreCase(projectName)) {
 					filelistForUser.add(filelist.get(leng));
 				}
 			}
@@ -78,8 +82,8 @@ public class UserDBService {
 		// Accessed;
 		else if (role.equalsIgnoreCase("ROLE_MANAGER")) {
 			for (int leng = 0; leng < listSize; leng++) {
-				String department = user.getUserdepartment();
-				if (filelist.get(leng).getDocDepartment().equalsIgnoreCase(department)) {
+				if (filelist.get(leng).getDocCompany().equalsIgnoreCase(companyName)
+						&& filelist.get(leng).getDocDepartment().equalsIgnoreCase(deptartmentName)) {
 					filelistForUser.add(filelist.get(leng));
 				}
 			}

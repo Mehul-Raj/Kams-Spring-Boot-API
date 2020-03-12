@@ -54,10 +54,8 @@ public class FlieController {
 			} catch (FileStorageException e) {
 				e.printStackTrace();
 			}
-
 		} else if (appConfig.getStorageName().equalsIgnoreCase("AwsCloud")) {
 			fileName = awsUpload.uploadFile(file, uploadTo, documentTag, getEmailId);
-
 		}
 		return ResponseEntity.ok(fileName);
 	}
