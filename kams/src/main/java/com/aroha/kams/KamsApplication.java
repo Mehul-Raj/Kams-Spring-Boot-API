@@ -20,7 +20,7 @@ import com.aroha.kams.properties.FileStorageProperties;
 @EnableConfigurationProperties({
 	FileStorageProperties.class
 })
-public class KamsApplication {
+public class KamsApplication{
 
 	@PostConstruct
 	void init() {
